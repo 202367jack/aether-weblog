@@ -1,0 +1,76 @@
+baseURL = "https://example.com/"
+locale = "zh-CN"
+defaultContentLanguage = "zh"
+title = "Aether Weblog"
+enableRobotsTXT = true
+timeZone = "Asia/Shanghai"
+
+[params]
+  author = "Aether"
+  description = "学习经历、项目与影视推荐"
+
+[params.profile]
+  name = "Aether"
+  bio = "Java 后端开发。这里记录学习过程、做过的项目，以及看过的影视。"
+  avatar = "images/avatar.jpg"
+  location = "中国"
+
+[[params.social]]
+  name = "GitHub"
+  url = "https://github.com/202367jack"
+
+[[params.social]]
+  name = "邮箱"
+  url = "mailto:you@example.com"
+
+[[params.social]]
+  name = "豆瓣"
+  url = "https://www.douban.com/people/your-id/"
+
+[[params.social]]
+  name = "B 站"
+  url = "https://space.bilibili.com/your-id"
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+
+[outputs]
+  home = ["html", "rss", "json"]
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[markup.highlight]
+  style = "github"
+  noClasses = true
+
+[[menu.main]]
+  name = "笔记"
+  pageRef = "/posts"
+  weight = 10
+
+[[menu.main]]
+  name = "项目"
+  pageRef = "/projects"
+  weight = 20
+
+[[menu.main]]
+  name = "影视"
+  pageRef = "/media"
+  weight = 30
+
+[[menu.main]]
+  name = "关于"
+  pageRef = "/about"
+  weight = 40
+
+[[menu.main]]
+  name = "简历"
+  pageRef = "/resume"
+  weight = 50
+
+[[menu.main]]
+  name = "搜索"
+  pageRef = "/search"
+  weight = 60

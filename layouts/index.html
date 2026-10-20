@@ -1,0 +1,76 @@
+{{ define "main" }}
+<section class="profile">
+  <div class="profile-text">
+    <h1>{{ site.Params.profile.name }}</h1>
+    <p class="bio">{{ site.Params.profile.bio }}</p>
+    <ul class="social">
+      {{ range site.Params.social }}
+        <li><a href="{{ .url }}" rel="me">{{ .name }}</a></li>
+      {{ end }}
+    </ul>
+  </div>
+  <div class="avatar">
+    {{ if fileExists "static/images/avatar.jpg" }}
+      <img src="{{ "images/avatar.jpg" | relURL }}" alt="{{ site.Params.profile.name }}">
+    {{ else }}
+      <span>{{ site.Params.profile.name | truncate 1 "" }}</span>
+    {{ end }}
+  </div>
+</section>
+
+<section class="home-section">
+  <div class="section-head">
+    <h2>最近笔记</h2>
+    <a class="more" href="{{ "/posts/" | relURL }}">全部 →</a>
+  </div>
+  <ul class="entry-list">
+    {{ range first 5 (where site.RegularPages "Section" "posts") }}
+      <li>
+        <time>{{ .Date.Format "2006-01-02" }}</time>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      </li>
+    {{ end }}
+  </ul>
+</section>
+
+<section class="home-section">
+  <div class="section-head">
+    <h2>在做的项目</h2>
+    <a class="more" href="{{ "/projects/" | relURL }}">全部 →</a>
+  </div>
+  <div class="card-grid">
+    {{ range first 2 (where site.RegularPages "Section" "projects") }}
+      <a class="card" href="{{ .RelPermalink }}">
+        <strong>{{ .Title }}</strong>
+        <p>{{ .Params.summary }}</p>
+        {{ with .Params.stack }}<p class="meta">{{ . }}</p>{{ end }}
+      </a>
+    {{ end }}
+  </div>
+</section>
+
+<section class="home-section">
+  <div class="section-head">
+    <h2>最近看的</h2>
+    <a class="more" href="{{ "/media/" | relURL }}">全部 →</a>
+  </div>
+  <div class="poster-grid small">
+    {{ range first 4 (sort (where site.RegularPages "Section" "media") "Params.rating" "desc") }}
+      <a class="poster-card" href="{{ .RelPermalink }}">
+        <div class="poster">
+          {{ with .Params.poster }}
+            <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy">
+          {{ else }}
+            <div class="poster-fallback"><span>{{ .Title }}</span></div>
+          {{ end }}
+          <span class="rating-badge">{{ .Params.rating }}</span>
+        </div>
+        <div class="poster-meta">
+          <strong>{{ .Title }}</strong>
+          <span>{{ .Params.year }} · {{ .Params.medium }}</span>
+        </div>
+      </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

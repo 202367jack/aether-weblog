@@ -1,0 +1,26 @@
+{{ define "main" }}
+<article class="article media-detail">
+  <div class="media-head">
+    <div class="poster large">
+      {{ with .Params.poster }}
+        <img src="{{ . }}" alt="{{ $.Title }}">
+      {{ else }}
+        <div class="poster-fallback"><span>{{ .Title }}</span></div>
+      {{ end }}
+    </div>
+    <div class="media-info">
+      <h1>{{ .Title }}</h1>
+      <p class="meta">{{ .Params.medium }} · {{ .Params.year }}{{ with .Params.status }} · {{ . }}{{ end }}</p>
+      <p class="rating">我的评分 <strong>{{ .Params.rating }}</strong><span>/ 10</span></p>
+      <div class="rating-bar"><span style="width: {{ mul .Params.rating 10 }}%"></span></div>
+      {{ with .GetTerms "tags" }}
+        <p class="tags">{{ range . }}<a class="tag" href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>{{ end }}</p>
+      {{ end }}
+    </div>
+  </div>
+
+  {{ with .Params.summary }}<blockquote>{{ . }}</blockquote>{{ end }}
+
+  {{ .Content }}
+</article>
+{{ end }}

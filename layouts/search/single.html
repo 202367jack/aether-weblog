@@ -1,0 +1,12 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+{{ .Content }}
+
+<div class="search-box">
+  <input id="search-input" type="search" placeholder="搜索标题、正文、标签…" autocomplete="off" autofocus>
+</div>
+
+<div id="search-results" data-index="{{ "index.json" | relURL }}"></div>
+
+<script src="{{ "js/search.js" | relURL }}" defer></script>
+{{ end }}

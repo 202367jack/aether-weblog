@@ -1,0 +1,54 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+{{ .Content }}
+
+{{ $types := slice }}
+{{ range .Pages }}{{ with .Params.medium }}{{ $types = $types | append . }}{{ end }}{{ end }}
+{{ $types = uniq $types }}
+
+{{ if gt (len $types) 1 }}
+  <div class="chips" id="type-filter">
+    <button class="chip active" type="button" data-type="all">全部</button>
+    {{ range $types }}<button class="chip" type="button" data-type="{{ . }}">{{ . }}</button>{{ end }}
+  </div>
+{{ end }}
+
+<div class="poster-grid">
+  {{ range (sort .Pages "Params.rating" "desc") }}
+    {{ $cls := "mid" }}
+    {{ $r := float (.Params.rating | default 0) }}
+    {{ if ge $r 9.0 }}{{ $cls = "high" }}{{ else if lt $r 8.0 }}{{ $cls = "low" }}{{ end }}
+    <a class="poster-card" href="{{ .RelPermalink }}" data-type="{{ .Params.medium }}">
+      <div class="poster">
+        {{ with .Params.poster }}
+          <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy">
+        {{ else }}
+          <div class="poster-fallback"><span>{{ .Title }}</span></div>
+        {{ end }}
+        <span class="rating-badge {{ $cls }}">{{ .Params.rating }}</span>
+      </div>
+      <div class="poster-meta">
+        <strong>{{ .Title }}</strong>
+        <span>{{ .Params.year }} · {{ .Params.medium }}{{ with .Params.status }} · {{ . }}{{ end }}</span>
+      </div>
+    </a>
+  {{ end }}
+</div>
+
+<script>
+  (function () {
+    var bar = document.getElementById('type-filter');
+    if (!bar) return;
+    bar.addEventListener('click', function (e) {
+      var btn = e.target.closest('.chip');
+      if (!btn) return;
+      bar.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
+      btn.classList.add('active');
+      var type = btn.getAttribute('data-type');
+      document.querySelectorAll('.poster-card').forEach(function (card) {
+        card.style.display = (type === 'all' || card.getAttribute('data-type') === type) ? '' : 'none';
+      });
+    });
+  })();
+</script>
+{{ end }}

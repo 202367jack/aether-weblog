@@ -1,0 +1,7 @@
+{{ define "main" }}
+<div class="notfound">
+  <h1>404</h1>
+  <p>这一页不存在，可能是链接写错了，或者文章被改名了。</p>
+  <p><a href="{{ "/" | relURL }}">回首页</a> · <a href="{{ "/search/" | relURL }}">搜一下</a></p>
+</div>
+{{ end }}

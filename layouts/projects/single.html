@@ -1,0 +1,27 @@
+{{ define "main" }}
+<article class="article">
+  <header>
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.summary }}<p class="summary">{{ . }}</p>{{ end }}
+  </header>
+
+  <dl class="facts">
+    {{ with .Params.stack }}
+      <div><dt>技术栈</dt><dd>{{ . }}</dd></div>
+    {{ end }}
+    {{ with .Params.status }}
+      <div><dt>状态</dt><dd><span class="badge">{{ . }}</span></dd></div>
+    {{ end }}
+    {{ with .Params.repo }}
+      <div><dt>代码</dt><dd><a href="{{ . }}">{{ . }}</a></dd></div>
+    {{ end }}
+    {{ with .Params.demo }}
+      <div><dt>演示</dt><dd><a href="{{ . }}">{{ . }}</a></dd></div>
+    {{ end }}
+  </dl>
+
+  {{ .Content }}
+
+  <p class="back"><a href="{{ "/projects/" | relURL }}">← 返回项目列表</a></p>
+</article>
+{{ end }}

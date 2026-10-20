@@ -1,0 +1,27 @@
+{{ define "main" }}
+<article class="article">
+  <header>
+    <h1>{{ .Title }}</h1>
+    {{ if not .Date.IsZero }}
+      <p class="meta">
+        {{ .Date.Format "2006-01-02" }}
+        {{ with .Params.categories }} · {{ delimit . " / " }}{{ end }}
+        {{ with .ReadingTime }} · {{ . }} 分钟{{ end }}
+      </p>
+    {{ end }}
+  </header>
+
+  {{ .Content }}
+
+  {{ with .GetTerms "tags" }}
+    <p class="tags">
+      {{ range . }}<a class="tag" href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>{{ end }}
+    </p>
+  {{ end }}
+
+  <nav class="pager">
+    {{ with .PrevInSection }}<a href="{{ .RelPermalink }}">← {{ .Title }}</a>{{ end }}
+    {{ with .NextInSection }}<a class="next" href="{{ .RelPermalink }}">{{ .Title }} →</a>{{ end }}
+  </nav>
+</article>
+{{ end }}
