@@ -15,25 +15,16 @@
 
   {{ with .Params.summary }}<p class="resume-summary">{{ . }}</p>{{ end }}
 
-  {{ with .Params.skills }}
+  {{ with .Params.education }}
     <section>
-      <h2>技能</h2>
-      <ul class="skill-list">
-        {{ range . }}<li>{{ . }}</li>{{ end }}
-      </ul>
-    </section>
-  {{ end }}
-
-  {{ with .Params.experience }}
-    <section>
-      <h2>工作经历</h2>
+      <h2>教育背景</h2>
       {{ range . }}
         <div class="resume-item">
           <div class="resume-item-head">
-            <strong>{{ .company }}</strong>
+            <strong>{{ .school }}</strong>
             <span class="meta">{{ .period }}</span>
           </div>
-          <p class="role">{{ .role }}</p>
+          {{ with .degree }}<p class="role">{{ . }}</p>{{ end }}
           {{ with .bullets }}
             <ul>{{ range . }}<li>{{ . }}</li>{{ end }}</ul>
           {{ end }}
@@ -42,33 +33,40 @@
     </section>
   {{ end }}
 
+  {{ with .Params.skills }}
+    <section>
+      <h2>专业技能</h2>
+      <ul class="skill-list">
+        {{ range . }}<li>{{ . }}</li>{{ end }}
+      </ul>
+    </section>
+  {{ end }}
+
   {{ with .Params.projects }}
     <section>
-      <h2>项目</h2>
+      <h2>项目经历</h2>
       {{ range . }}
         <div class="resume-item">
           <div class="resume-item-head">
             <strong>{{ .name }}</strong>
-            {{ with .url }}<a class="meta" href="{{ . }}">{{ . }}</a>{{ end }}
+            <span class="meta">{{ .period }}</span>
           </div>
-          {{ with .desc }}<p>{{ . }}</p>{{ end }}
+          {{ with .desc }}<p class="resume-desc">{{ . }}</p>{{ end }}
+          {{ with .bullets }}
+            <ul>{{ range . }}<li>{{ . }}</li>{{ end }}</ul>
+          {{ end }}
+          {{ with .url }}<p class="meta"><a href="{{ . }}">{{ . }}</a></p>{{ end }}
         </div>
       {{ end }}
     </section>
   {{ end }}
 
-  {{ with .Params.education }}
+  {{ with .Params.awards }}
     <section>
-      <h2>教育</h2>
-      {{ range . }}
-        <div class="resume-item">
-          <div class="resume-item-head">
-            <strong>{{ .school }}</strong>
-            <span class="meta">{{ .period }}</span>
-          </div>
-          {{ with .degree }}<p>{{ . }}</p>{{ end }}
-        </div>
-      {{ end }}
+      <h2>荣誉与证书</h2>
+      <ul class="skill-list">
+        {{ range . }}<li>{{ . }}</li>{{ end }}
+      </ul>
     </section>
   {{ end }}
 

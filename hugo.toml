@@ -1,4 +1,4 @@
-baseURL = "https://example.com/"
+baseURL = "http://111.228.25.195/"
 locale = "zh-CN"
 defaultContentLanguage = "zh"
 title = "Aether Weblog"
@@ -7,13 +7,13 @@ timeZone = "Asia/Shanghai"
 
 [params]
   author = "Aether"
-  description = "学习经历、项目与影视推荐"
+  description = "Aether 的个人站点：学习经历、项目与影视推荐"
 
 [params.profile]
   name = "Aether"
-  bio = "Java 后端开发。这里记录学习过程、做过的项目，以及看过的影视。"
+  bio = "网名 Aether，南昌大学软件工程 2023 级。写 Java 后端，也折腾服务器。"
   avatar = "images/avatar.jpg"
-  location = "中国"
+  location = "江西 · 南昌"
 
 [[params.social]]
   name = "GitHub"
@@ -21,15 +21,11 @@ timeZone = "Asia/Shanghai"
 
 [[params.social]]
   name = "邮箱"
-  url = "mailto:you@example.com"
-
-[[params.social]]
-  name = "豆瓣"
-  url = "https://www.douban.com/people/your-id/"
+  url = "mailto:wangjie202367@qq.com"
 
 [[params.social]]
   name = "B 站"
-  url = "https://space.bilibili.com/your-id"
+  url = "https://space.bilibili.com/3494369350912310"
 
 [taxonomies]
   tag = "tags"
