@@ -833,3 +833,85 @@ html[data-theme="dark"] .poster-fallback {
     linear-gradient(150deg, rgba(126, 166, 255, 0.10), transparent 62%),
     #161a21;
 }
+
+/* ================= v3 交互增强 ================= */
+
+#cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 560px;
+  height: 560px;
+  margin: -280px 0 0 -280px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+  will-change: transform;
+  transition: opacity 0.45s ease;
+  background: radial-gradient(
+    circle,
+    rgba(47, 111, 237, 0.18) 0%,
+    rgba(47, 111, 237, 0.06) 42%,
+    transparent 66%
+  );
+}
+
+html[data-theme="dark"] #cursor-glow {
+  background: radial-gradient(
+    circle,
+    rgba(126, 166, 255, 0.22) 0%,
+    rgba(126, 166, 255, 0.07) 44%,
+    transparent 68%
+  );
+}
+
+#cursor-glow.on { opacity: 1; }
+
+.card.tilt {
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.18s ease-out, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card.tilt:hover {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-3px);
+}
+
+.card.tilt::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  background: radial-gradient(
+    240px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.45),
+    transparent 62%
+  );
+}
+
+.card.tilt:hover::after { opacity: 1; }
+
+html[data-theme="dark"] .card.tilt::after {
+  background: radial-gradient(
+    240px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.14),
+    transparent 62%
+  );
+}
+
+.card.tilt > * { position: relative; z-index: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  #cursor-glow { display: none; }
+}
+
+@media print {
+  #cursor-glow { display: none; }
+}

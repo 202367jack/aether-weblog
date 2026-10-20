@@ -20,6 +20,7 @@
   </script>
 </head>
 <body>
+  <div id="cursor-glow" aria-hidden="true"></div>
   <header class="wrap site-header">
     <a class="brand" href="{{ "/" | relURL }}">{{ site.Title }}</a>
     <nav class="nav">
@@ -48,5 +49,7 @@
       localStorage.setItem('theme', next);
     });
   </script>
+  {{ $enh := resources.Get "js/enhance.js" | minify | fingerprint }}
+  <script src="{{ $enh.RelPermalink }}" integrity="{{ $enh.Data.Integrity }}" defer></script>
 </body>
 </html>
