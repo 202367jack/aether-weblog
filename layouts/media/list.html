@@ -56,8 +56,10 @@
        data-genre="{{ $gs }}"
        data-region="{{ .Params.region }}">
       <div class="poster">
-        {{ with .Params.poster }}
-          <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy">
+        {{ $poster := .Params.poster }}
+        {{ with .Resources.GetMatch "poster.*" }}{{ $poster = (.Resize "300x450 webp q82").RelPermalink }}{{ end }}
+        {{ if $poster }}
+          <img src="{{ $poster }}" alt="{{ .Title }}" loading="lazy">
         {{ else }}
           <div class="poster-fallback"><span>{{ .Title }}</span></div>
         {{ end }}

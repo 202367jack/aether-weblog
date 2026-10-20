@@ -1,9 +1,11 @@
 {{ define "main" }}
 <article class="article media-detail">
+  {{ $poster := .Params.poster }}
+  {{ with .Resources.GetMatch "poster.*" }}{{ $poster = (.Resize "600x900 webp q82").RelPermalink }}{{ end }}
   <div class="media-head">
     <div class="poster large">
-      {{ with .Params.poster }}
-        <img src="{{ . }}" alt="{{ $.Title }}">
+      {{ if $poster }}
+        <img src="{{ $poster }}" alt="{{ .Title }}">
       {{ else }}
         <div class="poster-fallback"><span>{{ .Title }}</span></div>
       {{ end }}
@@ -13,7 +15,7 @@
       <p class="meta">{{ .Params.medium }}{{ with .Params.region }} · {{ . }}{{ end }} · {{ .Params.year }}{{ with .Params.status }} · {{ . }}{{ end }}</p>
       <p class="rating">我的评分 <strong>{{ .Params.rating }}</strong><span>/ 10</span></p>
       <div class="rating-bar"><span style="width: {{ mul .Params.rating 10 }}%"></span></div>
-            {{ with .Params.genre }}
+      {{ with .Params.genre }}
         <p class="tags">{{ if reflect.IsSlice . }}{{ range . }}<span class="tag">{{ . }}</span>{{ end }}{{ else }}<span class="tag">{{ . }}</span>{{ end }}</p>
       {{ end }}
       {{ with .GetTerms "tags" }}

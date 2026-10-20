@@ -6,6 +6,10 @@
   <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
   <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Params.summary }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}{{ end }}">
   <link rel="alternate" type="application/rss+xml" href="{{ "index.xml" | relURL }}" title="{{ site.Title }}">
+  {{ with resources.Get "images/avatar.jpg" }}
+    <link rel="icon" href="{{ (.Fill "64x64 webp q80").RelPermalink }}" type="image/webp">
+    <meta property="og:image" content="{{ (.Fill "1200x630 webp q80").RelPermalink }}">
+  {{ end }}
   {{ $css := resources.Get "css/style.css" | minify | fingerprint }}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
   <script>

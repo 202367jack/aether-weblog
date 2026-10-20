@@ -93,11 +93,13 @@ status: "进行中"
 ---
 title: "漫长的季节"
 date: 2023-04-22
-medium: "剧集"          # 电影 / 剧集 / 动画 / 综艺，列表按它筛选
+medium: "剧集"                  # 类型：电影 / 剧集 / 动画 / 综艺，列表第一行筛选
+genre: ["悬疑", "剧情", "家庭"]  # 剧情：列表第二行筛选，可多个
+region: "中国"                  # 地区：列表第三行筛选
 year: 2023
-rating: 9.4             # 0-10，列表按它从高到低排
-status: "看完"          # 在看 / 看完 / 重看 / 弃了
-poster: "https://cdn.jsdelivr.net/gh/202367jack/blog-assets@main/posters/xxx.jpg"
+rating: 9.4                     # 0-10，列表按它从高到低排
+status: "看完"                  # 在看 / 看完 / 重看 / 弃了
+poster: "https://example.com/xxx.jpg"   # 可省略，也可用同目录 poster.jpg
 summary: "一句话简介"
 tags: ["悬疑"]
 ---
@@ -109,27 +111,54 @@ tags: ["悬疑"]
 
 ## 图片怎么放
 
-两种，按用途分：
+三种图，三种放法。
 
-1. **文章配图**——放在文章同目录的 page bundle 里，Hugo 会随构建一起输出：
+**1. 文章配图 —— 跟文章放同一个文件夹（page bundle）**
 
-   ```
-   content/posts/某篇文章/
-   ├── index.md
-   └── images/截图.png
-   ```
+```
+content/posts/某篇文章/
+├── index.md
+└── shot.jpg
+```
 
-   正文里：`![说明](images/截图.png)`
+正文里用 shortcode（推荐）：
 
-2. **海报、头像、分享图**——放单独的图片仓库，通过 jsDelivr 引用：
+```
+{{</* img src="shot.jpg" alt="截图说明" caption="图注，可省略" */>}}
+```
 
-   ```
-   https://cdn.jsdelivr.net/gh/202367jack/blog-assets@main/posters/xxx.jpg
-   ```
+构建时 Hugo 自动做四件事：限制到最大 1600px、转 WebP、生成 800w / 1600w 两档 `srcset`、加 `loading="lazy"`。一张 1MB 的图出来通常 100–250KB。
 
-   好处是换了博客仓库、重建站点都不用重新传图。
+也可以写普通 Markdown 图片 `![](shot.jpg)`，但那是原图直出，没有 WebP 和响应式。
 
-头像放在 `static/images/avatar.jpg`，存在就显示照片，不存在就显示名字首字母的色块。
+**2. 影视海报 —— 放条目同目录，命名 `poster.*`**
+
+```
+content/media/漫长的季节/
+├── index.md
+└── poster.jpg
+```
+
+模板会自己缩：列表页 300×450、详情页 600×900，都是 WebP。注意**必须是文件夹形式**（`index.md` 而不是 `片名.md`）才认得到资源；继续用 `poster:` 写外链也支持，二选一。
+
+**3. 头像、favicon —— 放 assets**
+
+- 头像：`assets/images/avatar.jpg`，模板压成 256×256 WebP（原来那张 1MB 的原图会变十几 KB，favicon 再从它生成 64×64）
+- 其他固定图（分享图、背景）：`static/images/xxx.png`，原样输出到 `/images/xxx.png`
+
+### 为什么不用「GitHub 仓库 + jsDelivr」当主链路
+
+- jsDelivr 的大陆节点需要备案，国内访问时快时慢，偶尔直接打不开——你的读者大概率在大陆
+- 单文件超 20MB 会被拒；仓库越大，首次回源越慢
+- 图片跟着站点同源走（nginx + 7 天缓存）在国内是最稳的，也少一次 DNS/TLS 握手
+
+真要用图床（七牛、阿里云 OSS、Cloudflare R2），`poster:` 和 `{{</* img */>}}` 都接受完整 URL，直接换即可。
+
+### 体积红线
+
+- 单张原图 ≤ 2000px 宽、≤ 1.5MB（Hugo 会再压，但仓库里存的是原图）
+- 截图用 PNG，照片用 JPG
+- 仓库图片总量控制在 200MB 以内，否则 clone 和每次 Actions 构建都会变慢
 
 ## 简历
 

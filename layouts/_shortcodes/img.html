@@ -1,0 +1,28 @@
+{{- $src := .Get "src" -}}
+{{- $alt := .Get "alt" | default "" -}}
+{{- $caption := .Get "caption" -}}
+{{- $class := .Get "class" | default "" -}}
+{{- $url := "" -}}
+{{- $srcset := "" -}}
+{{- $sizes := "(max-width: 720px) 100vw, 720px" -}}
+{{- if or (hasPrefix $src "http") (hasPrefix $src "/") -}}
+  {{- $url = $src -}}
+{{- else -}}
+  {{- with .Page.Resources.GetMatch $src -}}
+    {{- $w := .Width -}}
+    {{- $largeW := cond (gt $w 1600) 1600 $w -}}
+    {{- $smallW := cond (gt $w 800) 800 $w -}}
+    {{- $large := .Resize (printf "%dx webp q85" $largeW) -}}
+    {{- $small := .Resize (printf "%dx webp q82" $smallW) -}}
+    {{- $url = $large.RelPermalink -}}
+    {{- if gt $w 800 -}}
+      {{- $srcset = printf "%s %dw, %s %dw" $small.RelPermalink $smallW $large.RelPermalink $largeW -}}
+    {{- end -}}
+  {{- else -}}
+    {{- errorf "img shortcode: 页面 %s 找不到图片资源 %q" .Page.Path $src -}}
+  {{- end -}}
+{{- end -}}
+<figure class="figure{{ with $class }} {{ . }}{{ end }}">
+  <img src="{{ $url }}"{{ with $srcset }} srcset="{{ . }}" sizes="{{ $sizes }}"{{ end }} alt="{{ $alt }}" loading="lazy" decoding="async">
+  {{ with $caption }}<figcaption>{{ . }}</figcaption>{{ end }}
+</figure>
