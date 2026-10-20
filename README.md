@@ -41,6 +41,8 @@ aether-weblog/
 │   ├── js/search.js       站内搜索（读 /index.json）
 │   ├── js/enhance.js      光斑跟随、卡片 3D 倾斜
 │   └── images/avatar.jpg  头像（构建时压成 256×256 WebP）
+├── 模板/                  笔记 / 随笔 / 影视 的起始模板（复制文件夹即可）
+├── 预览.bat               双击启动本地预览
 ├── scripts/install-nginx.sh   新服务器装 Nginx 与站点
 ├── deploy/                nginx.conf、nginx-cloud.service 模板
 ├── docs/写内容.md         新建笔记/随笔/影视、放图、发布
@@ -213,7 +215,6 @@ content/media/漫长的季节/
 **服务器端**——用仓库里的脚本，不要手动 apt 装 Nginx：
 
 ```bash
-mkdir -p /dev-ops
 git clone git@github.com:202367jack/aether-weblog.git /dev-ops/aether-weblog
 cd /dev-ops/aether-weblog
 sudo bash scripts/install-nginx.sh
