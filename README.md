@@ -7,6 +7,8 @@
 - 部署：GitHub Actions 构建 → rsync 到服务器 → Nginx 直接读文件
 - 内容真源：本仓库的 Markdown，文章历史 = `git log`
 
+**日常写作看 [docs/写内容.md](docs/写内容.md)**：新建笔记 / 随笔 / 影视、放图片、本地预览、push 发布的完整命令都在那一份里。
+
 ## 部署到新服务器
 
 服务器环境先按 [cloud-server-setup](https://github.com/202367jack/cloud-server-setup) 准备好（系统、Docker、基础工具），然后：
@@ -41,6 +43,7 @@ aether-weblog/
 │   └── images/avatar.jpg  头像（构建时压成 256×256 WebP）
 ├── scripts/install-nginx.sh   新服务器装 Nginx 与站点
 ├── deploy/                nginx.conf、nginx-cloud.service 模板
+├── docs/写内容.md         新建笔记/随笔/影视、放图、发布
 ├── docs/部署.md           部署步骤、HTTPS、排错
 └── .github/workflows/deploy.yml   构建 + rsync
 ```
@@ -49,7 +52,7 @@ aether-weblog/
 
 ```powershell
 winget install --id Hugo.Hugo.Extended -e   # 只需一次
-cd E:\code\java\blog
+cd D:\PrivateGithubRepository\aether-weblog
 hugo server -D
 ```
 
@@ -62,32 +65,44 @@ hugo --minify
 # 产物在 public/
 ```
 
-## 写一篇笔记
+## 写内容（笔记 / 随笔 / 影视）
 
-```bash
-hugo new posts/我的新文章.md
+完整步骤（建文件夹、front matter、放图、预览、发布、改删草稿）在 **[docs/写内容.md](docs/写内容.md)**。
+
+三步速记：
+
+```powershell
+cd D:\PrivateGithubRepository\aether-weblog
+New-Item -ItemType Directory -Force -Path "content\posts\docker-network-debug" | Out-Null
+New-Item -ItemType File -Force -Path "content\posts\docker-network-debug\index.md" | Out-Null
 ```
-
-或直接建文件（推荐，路径即 URL）：
 
 ```yaml
 ---
 title: "标题"
-date: 2026-10-20
-categories: ["技术"]      # 技术 / 随笔
+date: 2026-10-20T20:10:00+08:00
+categories: ["技术"]
 tags: ["Docker", "MySQL"]
 summary: "一两句话，会显示在列表和搜索结果里"
+draft: false
 ---
-
-正文……
 ```
 
-- `draft: true` 的文章只在 `hugo server -D` 下可见，`hugo` 构建会被排除。
-- 文件名决定 URL：`posts/我的新文章.md` → `/posts/我的新文章/`。中文 URL 能用，想干净就用英文。
+一条铁律：**一篇内容一个文件夹，里面必须有 `index.md`**。文件夹名就是 URL（`content/posts/docker-network-debug/` → `/posts/docker-network-debug/`），用英文、数字、连字符。
+
+`draft: true` 只在 `hugo server -D` 下可见，push 也不会发布。
+
+发布：
+
+```powershell
+git add -A
+git commit -m "post: 标题"
+git push
+```
 
 ## 加一个项目
 
-`content/projects/项目名.md`：
+`content/projects/项目名/index.md`：
 
 ```yaml
 ---
@@ -105,7 +120,7 @@ status: "进行中"
 
 ## 加一部影视
 
-`content/media/片名.md`：
+`content/media/片名/index.md`：
 
 ```yaml
 ---
@@ -117,11 +132,12 @@ region: "中国"                  # 地区：列表第三行筛选
 year: 2023
 rating: 9.4                     # 0-10，列表按它从高到低排
 status: "看完"                  # 在看 / 看完 / 重看 / 弃了
-poster: "https://example.com/xxx.jpg"   # 可省略，也可用同目录 poster.jpg
 summary: "一句话简介"
 tags: ["悬疑"]
 ---
 ```
+
+海报存成同目录的 `poster.jpg` 即自动压缩，也可用 `poster: "https://..."` 写外链。
 
 **注意字段叫 `medium` 不叫 `type`**：Hugo 里 `type` 会改变模板查找路径，用了它这一页就不会走 `layouts/media/single.html`。
 
@@ -194,15 +210,19 @@ content/media/漫长的季节/
 
 ### 一次性准备
 
-**服务器端：**
+**服务器端**——用仓库里的脚本，不要手动 apt 装 Nginx：
 
 ```bash
-sudo mkdir -p /var/www/blog
-sudo chown -R $USER:$USER /var/www/blog
-sudo apt install -y nginx rsync
+mkdir -p /dev-ops
+git clone git@github.com:202367jack/aether-weblog.git /dev-ops/aether-weblog
+cd /dev-ops/aether-weblog
+sudo bash scripts/install-nginx.sh
 ```
 
-把 `deploy/nginx.conf` 改好 `server_name` 后放到 `/etc/nginx/sites-available/blog`，软链到 `sites-enabled`，`nginx -t && systemctl reload nginx`。
+脚本会装依赖、从源码编译 Nginx 1.30.6 到 `/codedeveloper/circumstances/nginx/`、写站点配置 `conf/sites/blog.conf`、注册 systemd 服务 `nginx-cloud`，最后自检。
+重复执行是安全的：已编译就跳过，站点配置已存在就不覆盖。
+
+细节、换域名、HTTPS、排错：[docs/部署.md](docs/部署.md)。
 
 **GitHub 仓库 Secrets：**
 
