@@ -2,6 +2,8 @@
 title: "让子弹飞"
 date: 2010-12-16
 medium: "电影"
+genre: ["剧情", "喜剧", "犯罪"]
+region: "中国"
 year: 2010
 rating: 9.0
 status: "重看"

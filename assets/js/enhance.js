@@ -47,7 +47,7 @@
     el.style.setProperty('--my', '50%');
   }
 
-  var cards = document.querySelectorAll('.card');
+  var cards = document.querySelectorAll('.card, .poster-card');
   Array.prototype.forEach.call(cards, function (el) {
     el.classList.add('tilt');
     reset(el);

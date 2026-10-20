@@ -10,9 +10,12 @@
     </div>
     <div class="media-info">
       <h1>{{ .Title }}</h1>
-      <p class="meta">{{ .Params.medium }} · {{ .Params.year }}{{ with .Params.status }} · {{ . }}{{ end }}</p>
+      <p class="meta">{{ .Params.medium }}{{ with .Params.region }} · {{ . }}{{ end }} · {{ .Params.year }}{{ with .Params.status }} · {{ . }}{{ end }}</p>
       <p class="rating">我的评分 <strong>{{ .Params.rating }}</strong><span>/ 10</span></p>
       <div class="rating-bar"><span style="width: {{ mul .Params.rating 10 }}%"></span></div>
+            {{ with .Params.genre }}
+        <p class="tags">{{ if reflect.IsSlice . }}{{ range . }}<span class="tag">{{ . }}</span>{{ end }}{{ else }}<span class="tag">{{ . }}</span>{{ end }}</p>
+      {{ end }}
       {{ with .GetTerms "tags" }}
         <p class="tags">{{ range . }}<a class="tag" href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>{{ end }}</p>
       {{ end }}

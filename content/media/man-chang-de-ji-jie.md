@@ -2,6 +2,8 @@
 title: "漫长的季节"
 date: 2023-04-22
 medium: "剧集"
+genre: ["悬疑", "剧情", "家庭"]
+region: "中国"
 year: 2023
 rating: 9.4
 status: "看完"

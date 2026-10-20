@@ -2,23 +2,59 @@
 <h1>{{ .Title }}</h1>
 {{ .Content }}
 
-{{ $types := slice }}
-{{ range .Pages }}{{ with .Params.medium }}{{ $types = $types | append . }}{{ end }}{{ end }}
-{{ $types = uniq $types }}
-
-{{ if gt (len $types) 1 }}
-  <div class="chips" id="type-filter">
-    <button class="chip active" type="button" data-type="all">全部</button>
-    {{ range $types }}<button class="chip" type="button" data-type="{{ . }}">{{ . }}</button>{{ end }}
-  </div>
+{{/* 三轴归类：类型 / 剧情 / 地区 */}}
+{{ $mediums := slice }}
+{{ $genres := slice }}
+{{ $regions := slice }}
+{{ range .Pages }}
+  {{ with .Params.medium }}{{ $mediums = $mediums | append . }}{{ end }}
+  {{ $g := .Params.genre }}
+  {{ if $g }}
+    {{ if reflect.IsSlice $g }}{{ range $g }}{{ $genres = $genres | append . }}{{ end }}
+    {{ else }}{{ $genres = $genres | append $g }}{{ end }}
+  {{ end }}
+  {{ with .Params.region }}{{ $regions = $regions | append . }}{{ end }}
 {{ end }}
+{{ $mediums = uniq $mediums }}
+{{ $genres = uniq $genres }}
+{{ $regions = uniq $regions }}
 
-<div class="poster-grid">
+<div class="filters">
+  <div class="filter-row" data-axis="medium">
+    <span class="filter-label">类型</span>
+    <button class="chip active" type="button" data-value="">全部</button>
+    {{ range $mediums }}<button class="chip" type="button" data-value="{{ . }}">{{ . }}</button>{{ end }}
+  </div>
+  {{ if $genres }}
+  <div class="filter-row" data-axis="genre">
+    <span class="filter-label">剧情</span>
+    <button class="chip active" type="button" data-value="">全部</button>
+    {{ range $genres }}<button class="chip" type="button" data-value="{{ . }}">{{ . }}</button>{{ end }}
+  </div>
+  {{ end }}
+  {{ if $regions }}
+  <div class="filter-row" data-axis="region">
+    <span class="filter-label">地区</span>
+    <button class="chip active" type="button" data-value="">全部</button>
+    {{ range $regions }}<button class="chip" type="button" data-value="{{ . }}">{{ . }}</button>{{ end }}
+  </div>
+  {{ end }}
+</div>
+
+<p class="filter-count" id="filter-count"></p>
+
+<div class="poster-grid" id="poster-grid">
   {{ range (sort .Pages "Params.rating" "desc") }}
     {{ $cls := "mid" }}
     {{ $r := float (.Params.rating | default 0) }}
     {{ if ge $r 9.0 }}{{ $cls = "high" }}{{ else if lt $r 8.0 }}{{ $cls = "low" }}{{ end }}
-    <a class="poster-card" href="{{ .RelPermalink }}" data-type="{{ .Params.medium }}">
+    {{ $g := .Params.genre }}
+    {{ $gs := "" }}
+    {{ if $g }}{{ if reflect.IsSlice $g }}{{ $gs = delimit $g "|" }}{{ else }}{{ $gs = $g }}{{ end }}{{ end }}
+    <a class="poster-card" href="{{ .RelPermalink }}"
+       data-medium="{{ .Params.medium }}"
+       data-genre="{{ $gs }}"
+       data-region="{{ .Params.region }}">
       <div class="poster">
         {{ with .Params.poster }}
           <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy">
@@ -29,26 +65,55 @@
       </div>
       <div class="poster-meta">
         <strong>{{ .Title }}</strong>
-        <span>{{ .Params.year }} · {{ .Params.medium }}{{ with .Params.status }} · {{ . }}{{ end }}</span>
+        <span>{{ .Params.year }} · {{ .Params.medium }}{{ with .Params.region }} · {{ . }}{{ end }}</span>
       </div>
     </a>
   {{ end }}
 </div>
 
+<p class="filter-count" id="filter-empty" hidden>没有符合这三个条件的内容，换个组合试试。</p>
+
 <script>
   (function () {
-    var bar = document.getElementById('type-filter');
-    if (!bar) return;
-    bar.addEventListener('click', function (e) {
-      var btn = e.target.closest('.chip');
-      if (!btn) return;
-      bar.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
-      btn.classList.add('active');
-      var type = btn.getAttribute('data-type');
-      document.querySelectorAll('.poster-card').forEach(function (card) {
-        card.style.display = (type === 'all' || card.getAttribute('data-type') === type) ? '' : 'none';
+    var state = { medium: null, genre: null, region: null };
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.poster-card'));
+    var count = document.getElementById('filter-count');
+    var empty = document.getElementById('filter-empty');
+
+    function apply() {
+      var shown = 0;
+      cards.forEach(function (card) {
+        var ok = true;
+        if (state.medium && card.dataset.medium !== state.medium) ok = false;
+        if (state.genre && (card.dataset.genre || '').split('|').indexOf(state.genre) < 0) ok = false;
+        if (state.region && card.dataset.region !== state.region) ok = false;
+        card.style.display = ok ? '' : 'none';
+        if (ok) shown++;
+      });
+      if (count) count.textContent = shown === cards.length ? '' : '匹配 ' + shown + ' / ' + cards.length + ' 部';
+      if (empty) empty.hidden = shown !== 0;
+    }
+
+    document.querySelectorAll('.filter-row').forEach(function (row) {
+      row.addEventListener('click', function (e) {
+        var btn = e.target.closest('.chip');
+        if (!btn) return;
+        var axis = row.getAttribute('data-axis');
+        var val = btn.getAttribute('data-value');
+        var wasActive = btn.classList.contains('active');
+        row.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
+        if (wasActive || !val) {
+          state[axis] = null;
+          row.querySelector('.chip[data-value=""]').classList.add('active');
+        } else {
+          state[axis] = val;
+          btn.classList.add('active');
+        }
+        apply();
       });
     });
+
+    apply();
   })();
 </script>
 {{ end }}

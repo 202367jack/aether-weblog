@@ -45,6 +45,10 @@ timeZone = "Asia/Shanghai"
   noClasses = true
 
 [[menu.main]]
+  name = "随笔"
+  pageRef = "/essays"
+  weight = 5
+[[menu.main]]
   name = "笔记"
   pageRef = "/posts"
   weight = 10

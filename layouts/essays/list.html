@@ -1,0 +1,28 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+{{ .Content }}
+
+{{ $pag := .Paginate .Pages 8 }}
+
+{{ if $pag.Pages }}
+<div class="essay-list">
+  {{ range $pag.Pages }}
+  <article class="essay-item">
+    <time>{{ .Date.Format "2006-01-02" }}</time>
+    <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+    {{ with .Params.summary }}<p>{{ . }}</p>{{ end }}
+  </article>
+  {{ end }}
+</div>
+
+{{ if gt $pag.TotalPages 1 }}
+<nav class="pagination">
+  {{ with $pag.Prev }}<a href="{{ .URL }}" rel="prev">← 上一页</a>{{ else }}<span></span>{{ end }}
+  <span>第 {{ $pag.PageNumber }} / {{ $pag.TotalPages }} 页</span>
+  {{ with $pag.Next }}<a href="{{ .URL }}" rel="next">下一页 →</a>{{ else }}<span></span>{{ end }}
+</nav>
+{{ end }}
+{{ else }}
+<p class="empty">还没有随笔，第一篇正在路上。</p>
+{{ end }}
+{{ end }}
