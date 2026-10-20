@@ -1,6 +1,6 @@
 ---
 title: "简历"
-name: "王杰"
+name: "Aether"
 role: "Java 后端开发 · 2027 届"
 location: "江西 · 南昌"
 email: "wangjie202367@qq.com"

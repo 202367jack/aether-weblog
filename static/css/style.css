@@ -497,3 +497,18 @@ h2.year {
   .resume-item { break-inside: avoid; }
   a { color: #000; }
 }
+
+/* --- 社交图标 --- */
+.social { gap: 10px; }
+.social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+}
+.social a svg { width: 19px; height: 19px; display: block; }
+.social a:hover { transform: translateY(-1px); }
+.empty { color: var(--muted); padding: 12px 0; }

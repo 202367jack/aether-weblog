@@ -17,14 +17,17 @@ timeZone = "Asia/Shanghai"
 
 [[params.social]]
   name = "GitHub"
+  icon = "github"
   url = "https://github.com/202367jack"
 
 [[params.social]]
   name = "邮箱"
+  icon = "mail"
   url = "mailto:wangjie202367@qq.com"
 
 [[params.social]]
   name = "B 站"
+  icon = "bilibili"
   url = "https://space.bilibili.com/3494369350912310"
 
 [taxonomies]
