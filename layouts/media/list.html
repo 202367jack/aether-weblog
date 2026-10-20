@@ -57,7 +57,7 @@
        data-region="{{ .Params.region }}">
       <div class="poster">
         {{ $poster := .Params.poster }}
-        {{ with .Resources.GetMatch "poster.*" }}{{ $poster = (.Resize "300x450 webp q82").RelPermalink }}{{ end }}
+        {{ with .Resources.GetMatch "poster.*" }}{{ $poster = (.Fill "300x450 webp q82 Center").RelPermalink }}{{ end }}
         {{ if $poster }}
           <img src="{{ $poster }}" alt="{{ .Title }}" loading="lazy">
         {{ else }}

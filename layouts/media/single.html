@@ -1,7 +1,7 @@
 {{ define "main" }}
 <article class="article media-detail">
   {{ $poster := .Params.poster }}
-  {{ with .Resources.GetMatch "poster.*" }}{{ $poster = (.Resize "600x900 webp q82").RelPermalink }}{{ end }}
+  {{ with .Resources.GetMatch "poster.*" }}{{ $poster = (.Fill "600x900 webp q82 Center").RelPermalink }}{{ end }}
   <div class="media-head">
     <div class="poster large">
       {{ if $poster }}
