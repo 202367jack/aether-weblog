@@ -512,3 +512,324 @@ h2.year {
 .social a svg { width: 19px; height: 19px; display: block; }
 .social a:hover { transform: translateY(-1px); }
 .empty { color: var(--muted); padding: 12px 0; }
+
+/* ================= v2 视觉升级 ================= */
+
+::selection { background: var(--accent-soft); }
+
+body { position: relative; overflow-x: hidden; }
+
+/* 背景光斑（固定，不随滚动） */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -30vh -10vw auto -10vw;
+  height: 85vh;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(42% 48% at 22% 26%, rgba(47, 111, 237, 0.16), transparent 72%),
+    radial-gradient(38% 42% at 80% 12%, rgba(168, 85, 247, 0.13), transparent 72%);
+  filter: blur(8px);
+}
+
+html[data-theme="dark"] body::before {
+  background:
+    radial-gradient(42% 48% at 22% 24%, rgba(126, 166, 255, 0.22), transparent 72%),
+    radial-gradient(38% 42% at 80% 10%, rgba(168, 85, 247, 0.20), transparent 72%);
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+  position: relative;
+  text-align: center;
+  padding: 64px 0 16px;
+}
+
+.hero .avatar {
+  position: relative;
+  width: 108px;
+  height: 108px;
+  margin: 0 auto 22px;
+  border-radius: 50%;
+  overflow: visible;
+  border: none;
+  background: none;
+}
+
+.hero .avatar::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--accent), #a855f7, #22d3ee, var(--accent));
+  filter: blur(7px);
+  opacity: 0.55;
+  animation: spin 9s linear infinite;
+  z-index: 0;
+}
+
+.hero .avatar img,
+.hero .avatar span {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--bg);
+}
+
+.hero-name {
+  margin: 0 0 10px;
+  font-size: clamp(2rem, 6vw, 2.9rem);
+  letter-spacing: -0.02em;
+  background: linear-gradient(115deg, var(--fg) 18%, var(--accent) 58%, #a855f7 92%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-bio {
+  max-width: 50ch;
+  margin: 0 auto 20px;
+  color: var(--muted);
+}
+
+.hero .social { justify-content: center; }
+
+/* ---------- 首页搜索（居中） ---------- */
+
+.search {
+  position: relative;
+  max-width: 520px;
+  margin: 30px auto 0;
+}
+
+.search input {
+  width: 100%;
+  padding: 13px 20px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--fg);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  outline: none;
+  -webkit-appearance: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.search input::placeholder { color: var(--muted); }
+
+.search input:focus {
+  background: var(--bg);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft), 0 14px 40px rgba(47, 111, 237, 0.14);
+}
+
+#search-results {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 10px);
+  z-index: 40;
+  text-align: left;
+  padding: 10px 18px;
+  max-height: 58vh;
+  overflow: auto;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(15, 17, 21, 0.18);
+}
+
+#search-results[hidden] { display: none; }
+#search-results .entry-list { margin: 0; }
+#search-results .hint { margin: 6px 0; }
+
+/* ---------- 卡片区块 ---------- */
+
+.home-section {
+  margin-top: 22px;
+  padding: 20px 24px 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--card);
+  animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+html[data-theme="dark"] .home-section { background: rgba(255, 255, 255, 0.02); }
+
+.home-section:nth-of-type(2) { animation-delay: 0.04s; }
+.home-section:nth-of-type(3) { animation-delay: 0.08s; }
+.home-section:nth-of-type(4) { animation-delay: 0.12s; }
+
+.section-head { margin-bottom: 12px; }
+
+.section-head h2::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  vertical-align: middle;
+}
+
+.card,
+.poster-card {
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 14px 34px rgba(15, 17, 21, 0.10);
+}
+
+.poster-card:hover { transform: translateY(-4px); }
+.poster-card:hover .poster { box-shadow: 0 16px 36px rgba(15, 17, 21, 0.18); }
+
+.social a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.social a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--accent-soft);
+}
+
+.social svg { width: 15px; height: 15px; }
+
+.entry-list a { transition: color 0.15s; }
+
+.site-footer {
+  margin-top: 40px;
+  padding-top: 18px;
+  padding-bottom: 30px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* ---------- 动效 ---------- */
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero .avatar::before { animation: none; }
+  .home-section { animation: none; }
+  .card:hover, .poster-card:hover, .social a:hover { transform: none; }
+}
+
+/* ---------- 小屏 ---------- */
+
+@media (max-width: 640px) {
+  .hero { padding: 40px 0 8px; }
+  .hero .avatar { width: 88px; height: 88px; }
+  .search { margin-top: 22px; }
+  .home-section { padding: 16px 16px 18px; border-radius: 14px; }
+}
+
+@media print {
+  body::before, .hero .avatar::before, .search { display: none; }
+  .home-section { animation: none; border: none; background: none; }
+}
+
+/* ================= v2.1 细节打磨 ================= */
+
+.poster {
+  border: 1px solid var(--line);
+  background: var(--card);
+}
+
+.poster-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 14px;
+  text-align: center;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--muted);
+  background:
+    linear-gradient(150deg, var(--accent-soft), transparent 62%),
+    var(--card);
+}
+
+.poster-fallback span { font-weight: 600; }
+
+.rating-badge {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(4px);
+}
+
+.rating-badge.high { box-shadow: 0 4px 16px rgba(240, 180, 41, 0.45); }
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.hero-bio { font-size: 0.98rem; line-height: 1.8; }
+
+/* ================= v2.2 明暗层次 ================= */
+
+.home-section {
+  background: #ffffff;
+  border-color: #eceef2;
+  box-shadow: 0 1px 2px rgba(15, 17, 21, 0.04), 0 10px 30px rgba(15, 17, 21, 0.05);
+}
+
+html[data-theme="dark"] .home-section {
+  background: rgba(255, 255, 255, 0.028);
+  border-color: #23262d;
+  box-shadow: none;
+}
+
+.card {
+  background: #f8f9fb;
+  border-color: #e9ebf0;
+}
+
+html[data-theme="dark"] .card {
+  background: rgba(255, 255, 255, 0.022);
+  border-color: #262a32;
+}
+
+html[data-theme="light"] body::before,
+html:not([data-theme="dark"]) body::before {
+  background:
+    radial-gradient(42% 48% at 22% 22%, rgba(47, 111, 237, 0.20), transparent 70%),
+    radial-gradient(38% 42% at 80% 8%, rgba(168, 85, 247, 0.16), transparent 70%);
+}
+
+.poster-fallback {
+  color: #4b5563;
+  background:
+    linear-gradient(150deg, rgba(47, 111, 237, 0.10), transparent 62%),
+    #f3f4f7;
+}
+
+html[data-theme="dark"] .poster-fallback {
+  color: var(--muted);
+  background:
+    linear-gradient(150deg, rgba(126, 166, 255, 0.10), transparent 62%),
+    #161a21;
+}

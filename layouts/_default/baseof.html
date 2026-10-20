@@ -10,7 +10,8 @@
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
   <script>
     (function () {
-      var t = localStorage.getItem('theme');
+      var forced = new URLSearchParams(location.search).get('theme');
+      var t = forced || localStorage.getItem('theme');
       if (!t) {
         t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       }

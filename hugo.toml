@@ -69,7 +69,3 @@ timeZone = "Asia/Shanghai"
   pageRef = "/resume"
   weight = 50
 
-[[menu.main]]
-  name = "搜索"
-  pageRef = "/search"
-  weight = 60
