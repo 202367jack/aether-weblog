@@ -1,0 +1,19 @@
+[Unit]
+Description=Nginx (custom build in /codedeveloper/circumstances)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+PIDFile=/codedeveloper/circumstances/nginx/current/logs/nginx.pid
+ExecStartPre=/codedeveloper/circumstances/nginx/current/sbin/nginx -t
+ExecStart=/codedeveloper/circumstances/nginx/current/sbin/nginx
+ExecReload=/codedeveloper/circumstances/nginx/current/sbin/nginx -s reload
+ExecStop=/bin/kill -s QUIT $MAINPID
+TimeoutStopSec=5
+KillMode=mixed
+LimitNOFILE=65535
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

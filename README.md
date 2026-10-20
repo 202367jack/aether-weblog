@@ -7,24 +7,42 @@
 - 部署：GitHub Actions 构建 → rsync 到服务器 → Nginx 直接读文件
 - 内容真源：本仓库的 Markdown，文章历史 = `git log`
 
+## 部署到新服务器
+
+服务器环境先按 [cloud-server-setup](https://github.com/202367jack/cloud-server-setup) 准备好（系统、Docker、基础工具），然后：
+
+```bash
+git clone git@github.com:202367jack/aether-weblog.git /dev-ops/aether-weblog
+cd /dev-ops/aether-weblog
+sudo bash scripts/install-nginx.sh        # 编译 Nginx + 站点配置 + systemd
+```
+
+再配部署密钥和三个 GitHub Secrets（`SERVER_HOST` / `SERVER_USER` / `SSH_PRIVATE_KEY`），push 即上线。
+完整步骤、换域名与 HTTPS、排错表：[docs/部署.md](docs/部署.md)。
+
 ## 目录
 
 ```
-blog/
-├── hugo.toml              站点配置（标题、菜单、社交链接、输出格式）
-├── archetypes/            hugo new 的模板
+aether-weblog/
+├── hugo.toml              站点配置（标题、菜单、社交、输出格式）
+├── archetypes/            hugo new 的模板（default.md / media.md）
 ├── content/
-│   ├── about/index.md     关于（学习经历、自我介绍）
+│   ├── about/index.md     关于
 │   ├── resume/index.md    简历（结构化 front matter，网页 + 打印导出 PDF）
-│   ├── posts/             笔记（技术 / 随笔，用 categories 区分）
+│   ├── essays/            随笔（按时间倒序，每页 8 篇）
+│   ├── posts/             技术笔记
 │   ├── projects/          项目
-│   ├── media/             影视推荐
-│   └── search/index.md    搜索页
-├── layouts/               模板
-├── static/css/style.css   样式（含深色模式与打印样式）
-├── static/js/search.js    搜索（读 /index.json，前端匹配）
-├── deploy/nginx.conf      服务器上的 Nginx 配置示例
-└── .github/workflows/deploy.yml
+│   └── media/             影视推荐（类型 / 剧情 / 地区三轴筛选）
+├── layouts/               页面模板
+├── assets/
+│   ├── css/style.css      样式（深色模式、打印样式、交互动效）
+│   ├── js/search.js       站内搜索（读 /index.json）
+│   ├── js/enhance.js      光斑跟随、卡片 3D 倾斜
+│   └── images/avatar.jpg  头像（构建时压成 256×256 WebP）
+├── scripts/install-nginx.sh   新服务器装 Nginx 与站点
+├── deploy/                nginx.conf、nginx-cloud.service 模板
+├── docs/部署.md           部署步骤、HTTPS、排错
+└── .github/workflows/deploy.yml   构建 + rsync
 ```
 
 ## 本地预览
